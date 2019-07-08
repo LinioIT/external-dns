@@ -62,22 +62,25 @@ type Config struct {
 // ClientGenerator provides clients
 type ClientGenerator interface {
 	KubeClient() (kubernetes.Interface, error)
-	IstioClient() (istiomodel.ConfigStore, error)
+	IstioGatewayClient() (istiomodel.ConfigStore, error)
+	IstioVirtualServiceClient() (istiomodel.ConfigStore, error)
 	CloudFoundryClient(cfAPPEndpoint string, cfUsername string, cfPassword string) (*cfclient.Client, error)
 }
 
 // SingletonClientGenerator stores provider clients and guarantees that only one instance of client
 // will be generated
 type SingletonClientGenerator struct {
-	KubeConfig     string
-	KubeMaster     string
-	RequestTimeout time.Duration
-	kubeClient     kubernetes.Interface
-	istioClient    istiomodel.ConfigStore
-	cfClient       *cfclient.Client
-	kubeOnce       sync.Once
-	istioOnce      sync.Once
-	cfOnce         sync.Once
+	KubeConfig                string
+	KubeMaster                string
+	RequestTimeout            time.Duration
+	kubeClient                kubernetes.Interface
+	istioGatewayClient        istiomodel.ConfigStore
+	istioVirtualServiceClient istiomodel.ConfigStore
+	cfClient                  *cfclient.Client
+	kubeOnce                  sync.Once
+	istioGatewayOnce          sync.Once
+	istioVirtualServiceOnce          sync.Once
+	cfOnce                    sync.Once
 }
 
 // KubeClient generates a kube client if it was not created before
@@ -89,13 +92,22 @@ func (p *SingletonClientGenerator) KubeClient() (kubernetes.Interface, error) {
 	return p.kubeClient, err
 }
 
-// IstioClient generates an istio client if it was not created before
-func (p *SingletonClientGenerator) IstioClient() (istiomodel.ConfigStore, error) {
+// IstioGatewayClient generates an istio client if it was not created before
+func (p *SingletonClientGenerator) IstioGatewayClient() (istiomodel.ConfigStore, error) {
 	var err error
-	p.istioOnce.Do(func() {
-		p.istioClient, err = NewIstioClient(p.KubeConfig)
+	p.istioGatewayOnce.Do(func() {
+		p.istioGatewayClient, err = NewIstioGatewayClient(p.KubeConfig)
 	})
-	return p.istioClient, err
+	return p.istioGatewayClient, err
+}
+
+// IstioVirtualServiceClient generates an istio client if it was not created before
+func (p *SingletonClientGenerator) IstioVirtualServiceClient() (istiomodel.ConfigStore, error) {
+	var err error
+	p.istioGatewayOnce.Do(func() {
+		p.istioVirtualServiceClient, err = NewIstioVirtualServiceClient(p.KubeConfig)
+	})
+	return p.istioVirtualServiceClient, err
 }
 
 // CloudFoundryClient generates a cf client if it was not created before
@@ -156,7 +168,7 @@ func BuildWithConfig(source string, p ClientGenerator, cfg *Config) (Source, err
 		if err != nil {
 			return nil, err
 		}
-		istioClient, err := p.IstioClient()
+		istioClient, err := p.IstioGatewayClient()
 		if err != nil {
 			return nil, err
 		}
@@ -167,7 +179,7 @@ func BuildWithConfig(source string, p ClientGenerator, cfg *Config) (Source, err
 		if err != nil {
 			return nil, err
 		}
-		istioClient, err := p.IstioClient()
+		istioClient, err := p.IstioVirtualServiceClient()
 		if err != nil {
 			return nil, err
 		}
@@ -232,7 +244,7 @@ func NewKubeClient(kubeConfig, kubeMaster string, requestTimeout time.Duration) 
 	return client, nil
 }
 
-// NewIstioClient returns a new Istio client object. It uses the configured
+// NewIstioGatewayClient returns a new Istio client object. It uses the configured
 // KubeConfig attribute to connect to the cluster. If KubeConfig isn't provided
 // it defaults to using the recommended default.
 // NB: Istio controls the creation of the underlying Kubernetes client, so we
@@ -240,7 +252,7 @@ func NewKubeClient(kubeConfig, kubeMaster string, requestTimeout time.Duration) 
 // wrappers) to the client's config at this level. Furthermore, the Istio client
 // constructor does not expose the ability to override the Kubernetes master,
 // so the Master config attribute has no effect.
-func NewIstioClient(kubeConfig string) (*istiocrd.Client, error) {
+func NewIstioGatewayClient(kubeConfig string) (*istiocrd.Client, error) {
 	if kubeConfig == "" {
 		if _, err := os.Stat(clientcmd.RecommendedHomeFile); err == nil {
 			kubeConfig = clientcmd.RecommendedHomeFile
@@ -257,7 +269,7 @@ func NewIstioClient(kubeConfig string) (*istiocrd.Client, error) {
 		return nil, err
 	}
 
-	log.Info("Created Istio client")
+	log.Info("Created Istio Gateway client")
 
 	return client, nil
 }
@@ -279,7 +291,7 @@ func NewIstioVirtualServiceClient(kubeConfig string) (*istiocrd.Client, error) {
 		return nil, err
 	}
 
-	log.Info("Created Istio client")
+	log.Info("Created Istio VirtualService client")
 
 	return client, nil
 }

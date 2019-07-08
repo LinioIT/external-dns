@@ -45,7 +45,7 @@ func (m *MockClientGenerator) KubeClient() (kubernetes.Interface, error) {
 	return nil, args.Error(1)
 }
 
-func (m *MockClientGenerator) IstioClient() (istiomodel.ConfigStore, error) {
+func (m *MockClientGenerator) IstioGatewayClient() (istiomodel.ConfigStore, error) {
 	args := m.Called()
 	if args.Error(1) == nil {
 		m.istioClient = args.Get(0).(istiomodel.ConfigStore)
@@ -70,7 +70,7 @@ type ByNamesTestSuite struct {
 func (suite *ByNamesTestSuite) TestAllInitialized() {
 	mockClientGenerator := new(MockClientGenerator)
 	mockClientGenerator.On("KubeClient").Return(fake.NewSimpleClientset(), nil)
-	mockClientGenerator.On("IstioClient").Return(NewFakeConfigStore(), nil)
+	mockClientGenerator.On("IstioGatewayClient").Return(NewFakeConfigStore(), nil)
 
 	sources, err := ByNames(mockClientGenerator, []string{"service", "ingress", "istio-gateway", "istio-virtual-service", "fake"}, minimalConfig)
 	suite.NoError(err, "should not generate errors")
@@ -116,7 +116,7 @@ func (suite *ByNamesTestSuite) TestKubeClientFails() {
 func (suite *ByNamesTestSuite) TestIstioClientFails() {
 	mockClientGenerator := new(MockClientGenerator)
 	mockClientGenerator.On("KubeClient").Return(fake.NewSimpleClientset(), nil)
-	mockClientGenerator.On("IstioClient").Return(nil, errors.New("foo"))
+	mockClientGenerator.On("IstioGatewayClient").Return(nil, errors.New("foo"))
 
 	_, err := ByNames(mockClientGenerator, []string{"istio-gateway"}, minimalConfig)
 	suite.Error(err, "should return an error if istio client cannot be created")
