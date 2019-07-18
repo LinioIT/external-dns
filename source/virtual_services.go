@@ -114,6 +114,7 @@ func (sc *virtualServiceSource) Endpoints() ([]*endpoint.Endpoint, error) {
 		}
 
 		vsEndpoints, err := sc.endpointsFromVirtualServiceConfig(config)
+
 		if err != nil {
 			return nil, err
 		}
@@ -167,7 +168,7 @@ func (sc *virtualServiceSource) endpointsFromTemplate(config *istiomodel.Config)
 	targets := getTargetsFromTargetAnnotation(config.Annotations)
 
 	if len(targets) == 0 {
-		targets, err = sc.targetsFromIstioIngressGatewayServices()
+		targets, err = sc.targetsFromIstioIngressGatewayServices(config.Spec.(*istionetworking.VirtualService))
 		if err != nil {
 			return nil, err
 		}
@@ -222,8 +223,22 @@ func (sc *virtualServiceSource) setResourceLabel(config istiomodel.Config, endpo
 	}
 }
 
-func (sc *virtualServiceSource) targetsFromIstioIngressGatewayServices() (targets endpoint.Targets, err error) {
-	for _, lbService := range sc.IstioIngressGatewayServices {
+func (sc *virtualServiceSource) targetsFromIstioIngressGatewayServices(virtualService *istionetworking.VirtualService) (targets endpoint.Targets, err error) {
+	for _, lbService := range virtualService.Gateways {
+		found := false;
+
+		for _, value := range sc.IstioIngressGatewayServices {
+			if value == lbService {
+				found = true;
+			}
+		}
+
+		if !found {
+			log.Debugf("Skipping Istio Virtual Service. Istio Gateway not whitelisted: \"%s\"", lbService);
+
+			continue;
+		}
+
 		lbNamespace, lbName, err := parseIngressGateway(lbService)
 		if err != nil {
 			return nil, err
@@ -255,15 +270,15 @@ func (sc *virtualServiceSource) endpointsFromVirtualServiceConfig(config istiomo
 	}
 
 	targets := getTargetsFromTargetAnnotation(config.Annotations)
+	virtualService := config.Spec.(*istionetworking.VirtualService)
 
 	if len(targets) == 0 {
-		targets, err = sc.targetsFromIstioIngressGatewayServices()
+		targets, err = sc.targetsFromIstioIngressGatewayServices(virtualService)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	virtualService := config.Spec.(*istionetworking.VirtualService)
 
 	providerSpecific := getProviderSpecificAnnotations(config.Annotations)
 

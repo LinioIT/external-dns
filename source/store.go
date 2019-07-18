@@ -104,7 +104,7 @@ func (p *SingletonClientGenerator) IstioGatewayClient() (istiomodel.ConfigStore,
 // IstioVirtualServiceClient generates an istio client if it was not created before
 func (p *SingletonClientGenerator) IstioVirtualServiceClient() (istiomodel.ConfigStore, error) {
 	var err error
-	p.istioGatewayOnce.Do(func() {
+	p.istioVirtualServiceOnce.Do(func() {
 		p.istioVirtualServiceClient, err = NewIstioVirtualServiceClient(p.KubeConfig)
 	})
 	return p.istioVirtualServiceClient, err
