@@ -29,9 +29,9 @@ require (
 	github.com/exoscale/egoscale v0.11.0
 	github.com/ffledgling/pdns-go v0.0.0-20180219074714-524e7daccd99
 	github.com/go-resty/resty v1.8.0 // indirect
+	github.com/gobs/pretty v0.0.0-20180724170744-09732c25a95b // indirect
 	github.com/gogo/googleapis v1.1.0 // indirect
 	github.com/golang/groupcache v0.0.0-20190129154638-5b532d6fd5ef // indirect
-	github.com/golang/mock v1.2.0 // indirect
 	github.com/google/btree v0.0.0-20180124185431-e89373fe6b4a // indirect
 	github.com/google/go-querystring v0.0.0-20170111101155-53e6ce116135 // indirect
 	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
@@ -71,6 +71,7 @@ require (
 	github.com/sirupsen/logrus v1.2.0
 	github.com/smartystreets/go-aws-auth v0.0.0-20180515143844-0c1422d1fdb9 // indirect
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
+	github.com/smartystreets/gunit v1.4.3 // indirect
 	github.com/soheilhy/cmux v0.1.3 // indirect
 	github.com/spf13/cobra v0.0.3 // indirect
 	github.com/spf13/pflag v1.0.2 // indirect
@@ -93,7 +94,7 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/ns1/ns1-go.v2 v2.0.0-20190322154155-0dafb5275fd1
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/yaml.v2 v2.2.8
 	istio.io/api v0.0.0-20190321180614-db16d82d3672
 	istio.io/istio v0.0.0-20190322063008-2b1331886076
 	k8s.io/api v0.0.0-20180628040859-072894a440bd
