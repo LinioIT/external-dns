@@ -11,7 +11,7 @@ require (
 	github.com/alecthomas/kingpin v2.2.5+incompatible
 	github.com/alecthomas/repr v0.0.0-20181024024818-d37bc2a10ba1 // indirect
 	github.com/aliyun/alibaba-cloud-sdk-go v0.0.0-20180828111155-cad214d7d71f
-	github.com/aws/aws-sdk-go v1.19.41
+	github.com/aws/aws-sdk-go v1.34.0
 	github.com/cenkalti/backoff v2.1.1+incompatible // indirect
 	github.com/cloudflare/cloudflare-go v0.0.0-20190102215809-0c85496d8730
 	github.com/cloudfoundry-community/go-cfclient v0.0.0-20190201205600-f136f9222381
@@ -29,9 +29,9 @@ require (
 	github.com/exoscale/egoscale v0.11.0
 	github.com/ffledgling/pdns-go v0.0.0-20180219074714-524e7daccd99
 	github.com/go-resty/resty v1.8.0 // indirect
+	github.com/gobs/pretty v0.0.0-20180724170744-09732c25a95b // indirect
 	github.com/gogo/googleapis v1.1.0 // indirect
 	github.com/golang/groupcache v0.0.0-20190129154638-5b532d6fd5ef // indirect
-	github.com/golang/mock v1.2.0 // indirect
 	github.com/google/btree v0.0.0-20180124185431-e89373fe6b4a // indirect
 	github.com/google/go-querystring v0.0.0-20170111101155-53e6ce116135 // indirect
 	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
@@ -63,7 +63,7 @@ require (
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/oracle/oci-go-sdk v1.8.0
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v0.9.3-0.20190127221311-3c4408c8b829
 	github.com/sanyu/dynectsoap v0.0.0-20181203081243-b83de5edc4e0
 	github.com/satori/go.uuid v1.2.0 // indirect
@@ -71,10 +71,11 @@ require (
 	github.com/sirupsen/logrus v1.2.0
 	github.com/smartystreets/go-aws-auth v0.0.0-20180515143844-0c1422d1fdb9 // indirect
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
+	github.com/smartystreets/gunit v1.4.4 // indirect
 	github.com/soheilhy/cmux v0.1.3 // indirect
 	github.com/spf13/cobra v0.0.3 // indirect
 	github.com/spf13/pflag v1.0.2 // indirect
-	github.com/stretchr/testify v1.2.2
+	github.com/stretchr/testify v1.5.1
 	github.com/tent/http-link-go v0.0.0-20130702225549-ac974c61c2f9 // indirect
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8 // indirect
 	github.com/transip/gotransip v5.8.2+incompatible
@@ -86,7 +87,7 @@ require (
 	go.uber.org/atomic v1.3.2 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.9.1 // indirect
-	golang.org/x/net v0.0.0-20190311183353-d8887717615a
+	golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 	golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421
 	google.golang.org/api v0.3.0
 	google.golang.org/appengine v1.5.0 // indirect
